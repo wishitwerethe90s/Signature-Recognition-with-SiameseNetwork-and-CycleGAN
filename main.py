@@ -19,7 +19,7 @@ from network import create_base_network_signet
 from utils import euclidean_distance, eucl_dist_output_shape
 
 
-img_w, img_h = 150, 220
+img_w, img_h = 150, 220 # TODO: may need to change img_w to 155 (run code and check first)
 input_shape=(img_h, img_w, 1)
 
 
@@ -40,12 +40,12 @@ outputs = Dense(1, activation="sigmoid")(distance)
 
 model = Model(inputs=[input_a, input_b], outputs=outputs)
 
-model.load_weights('C:/Users/osy/Desktop/signrecwsiamese/signet.h5')
+model.load_weights('weights/signet/signet.h5')
 
 threshold = 0.5
 
-img1 = cv2.imread("C:/Users/osy/Desktop/signrecwSiamese/r-sign.jpg")
-img2 = cv2.imread("C:/Users/osy/Desktop/signrecwSiamese/f-sign.jpg")
+img1 = cv2.imread("data/04_066.png")
+img2 = cv2.imread("data/08_066.png")
 
 img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
 img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
@@ -74,7 +74,7 @@ model.predict([np.expand_dims(img1, axis=0), np.expand_dims(img2, axis=0)])[0][0
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize = (10, 10))
 ax1.imshow(np.squeeze(img1), cmap='gray')
 ax2.imshow(np.squeeze(img2), cmap='gray')
-ax1.set_title('Gercek Imza')
+ax1.set_title('Genuine Signature')
 
 ax1.axis('off')
 ax2.axis('off')
@@ -83,10 +83,10 @@ result = model.predict([np.expand_dims(img1, axis=0), np.expand_dims(img2, axis=
 diff = result[0][0]
 print("Difference Score = ", diff)
 if diff > threshold:
-    print("Sahte Imza")
-    ax2.set_title('Sahte Imza')
+    print("Forged Signature")
+    ax2.set_title('Forged Signature')
 else:
-    print("Gercek Imza")
-    ax2.set_title('Gercek Imza')
+    print("Genuine Signature")
+    ax2.set_title('Genuine Signature')
 
 plt.show()
